@@ -56,10 +56,6 @@ module "equinix-fabric-connection-gcp" {
   fabric_destination_metro_code = "FR"
 }
 
-output "connection_details" {
-  value = module.equinix-fabric-connection-gcp
-}
-
 ```
 
 Run `terraform init -upgrade` and `terraform apply`.
