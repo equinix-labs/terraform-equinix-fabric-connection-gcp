@@ -17,8 +17,8 @@ variable "fabric_connection_name" {
 variable "fabric_destination_metro_code" {
   type        = string
   description = <<EOF
-  Destination Metro code where the connection will be created. If you do not know the code,
-  'fabric_destination_metro_name' can be use instead.
+  Destination Metro code where the connection will be created. If you do not know the code, 'fabric_destination_metro_name'
+  can be use instead.
   EOF
   default     = ""
 
@@ -33,9 +33,9 @@ variable "fabric_destination_metro_code" {
 variable "fabric_destination_metro_name" {
   type        = string
   description = <<EOF
-  Only required in the absence of 'fabric_destination_metro_code'. Metro name where the connection will be created, i.e.
-  'Frankfurt', 'Silicon Valley', 'Ashburn'. One of 'metro_code', 'metro_name' must be
-  provided.
+  Only required in the absence of 'fabric_destination_metro_code'. Metro name where the connection will be created,
+  i.e. 'Frankfurt', 'Silicon Valley', 'Ashburn'. One of 'fabric_destination_metro_code', 'fabric_destination_metro_name'
+  must be provided.
   EOF
   default     = ""
 }
@@ -49,10 +49,19 @@ variable "network_edge_device_id" {
 variable "network_edge_device_interface_id" {
   type        = number
   description = <<EOF
-  Applicable with 'network_edge_device_id', identifier of network interface on a given device, used for a connection. If not
-  specified then first available interface will be selected.
+  Applicable with 'network_edge_device_id', identifier of network interface on a given device, used for a connection.
+  If not specified then first available interface will be selected.
   EOF
   default     = 0
+}
+
+variable "network_edge_configure_bgp" {
+  type        = bool
+  description = <<EOF
+  Creation and management of Equinix Network Edge BGP peering configurations. Applicable with
+  'network_edge_device_id'.
+  EOF
+  default     = false
 }
 
 variable "fabric_port_name" {
@@ -86,7 +95,7 @@ variable "fabric_speed" {
   type        = number
   description = <<EOF
   Speed/Bandwidth in Mbps to be allocated to the connection. If not specified, it will be used the minimum
-  bandwidth available for the AWS service profile.
+  bandwidth available for the Google Cloud Partner Interconnect service profile.
   EOF
   default     = 0
 
@@ -125,9 +134,15 @@ variable "gcp_region" {
   default     = ""
 }
 
+variable "gcp_project" {
+  type        = string
+  description = "The project in which the GCP resources resides. If it is not provided, the provider project is used."
+  default     = ""
+}
+
 variable "gcp_compute_network_name" {
   type        = string
-  description = "The name of an existing Google Cloud VPC network. If unspecified, 'default' will be used."
+  description = "The name of an existing Google Cloud VPC network. If unspecified, default regional network will be used."
   default     = "default"
 }
 
@@ -147,4 +162,47 @@ variable "gcp_compute_interconnect_name" {
   type        = string
   description = "The name for Google Cloud InterconnectAttachment. If unspecified, it will be auto-generated."
   default     = ""
+}
+
+variable "gcp_interconnect_customer_asn" {
+  type        = string
+  description = "The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration on customer side."
+  default     = "65000"
+}
+
+variable "platform" {
+  type        = string
+  description = <<EOF
+  Platform this terraform module will run on. Applicable with 'gcp_configure_bgp' and 'network_edge_configure_bgp'.
+  Read 'gcp_configure_bgp' description for further details.
+  EOF
+
+  default     = "linux"
+
+  validation {
+    condition = contains(["linux", "darwin"], var.platform)
+    error_message = "Valid values are (linux, darwin)."
+  }
+}
+
+variable "gcp_configure_bgp" {
+  type        = bool
+  description = <<EOF
+  To complete configuration of bgp peering in Google platform. If 'network_edge_configure_bgp' is true
+  BGP will be configured as well in gcp even if 'gcp_configure_bgp' is false.
+
+  NOTE: Configuration of the bgp customer ASN in google side is not directly supported with current google terraform
+  provider (v3.72.0). As a workaround this module take advantage of 'terraform-google-gcloud' module which allows use
+  gcloud. However, it is only available for `linux` and `darwin` based operating systems.
+  EOF
+  default     = false
+}
+
+variable "gcp_gcloud_skip_download" {
+  description = <<EOF
+  Whether to skip downloading gcloud (assumes gcloud is already available outside the module). Applicbale with
+  'gcp_configure_bgp' and 'network_edge_configure_bgp'. Read 'gcp_configure_bgp' description for further details.
+  EOF
+  type        = bool
+  default     = true
 }

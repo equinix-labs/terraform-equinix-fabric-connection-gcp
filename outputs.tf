@@ -38,28 +38,42 @@ output "fabric_connection_seller_region" {
   value       = module.equinix-fabric-connection.primary_connection.seller_region
 }
 
+output "network_edge_bgp_state" {
+  description = <<EOF
+  Network Edge device BGP peer state. Terraform will wait for 'network_edge_bgp_provisioning_status' to be PROVISIONED
+  but it will not wait for the BGP session to be established and can return an empty result in first apply. To know
+  current BGP state it will be required to execute 'terraform refresh'.
+  EOF
+  value       = try(equinix_network_bgp.this[0].state, null)
+}
+
+output "network_edge_bgp_provisioning_status" {
+  description = "Network Edge device BGP peering configuration provisioning status."
+  value       = try(equinix_network_bgp.this[0].provisioning_status, null)
+}
+
 output "gcp_interconnect_id" {
   description = "Google Cloud Interconnect/VLAN attachment ID."
-  value = google_compute_interconnect_attachment.this.id
+  value       = google_compute_interconnect_attachment.this.id
 }
 
 output "gcp_cloud_router_id" {
   description = "Google Cloud Router ID."
-  value = local.gcp_compute_router_id
+  value       = local.gcp_compute_router_id
 }
 
 output "gcp_cloud_router_ip_address" {
   description = <<EOF
-  Google Cloud Router IPv4 address + prefix length to be configured on Cloud Router Interface for the interconnect
+  Google Cloud Router IPv4 address + prefix length to be configured on CLOUD Router Interface for the interconnect
   attachment.
   EOF
-  value = google_compute_interconnect_attachment.this.cloud_router_ip_address
+  value       = try(local.gcp_bgp_addresses.cloud_router_ip, null)
 }
 
 output "gcp_customer_router_ip_address" {
   description = <<EOF
-  Google Cloud Router IPv4 address + prefix length to be configured on customer router or Network Edge device subinterface for
+  Google Cloud Router IPv4 address + prefix length to be configured on CUSTOMER router or Network Edge device subinterface for
   the interconnect attachment.
   EOF
-  value = google_compute_interconnect_attachment.this.customer_router_ip_address
+  value       = try(local.gcp_bgp_addresses.customer_router_ip, null)
 }
