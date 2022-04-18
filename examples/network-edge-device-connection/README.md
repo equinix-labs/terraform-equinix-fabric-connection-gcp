@@ -1,13 +1,13 @@
 # Network Edge Device Connection Example
 
-This example demonstrates usage of the Equinix Connection module to establish a non-redundant Equinix Fabric L2 Connection from a Equinix Network Edge device to Google Cloud Interconnect. It will:
+This example demonstrates usage of the Equinix Connection GCP module to establish a non-redundant Equinix Fabric L2 Connection from a Equinix Network Edge device to Google Cloud Interconnect. It will:
 
-- Use 'default' VPC
-- Use the `project` specified in provider
-- Create a Google Cloud Router
-- Create a Google Cloud Interconnect/VLAN Attachment
-- Create Equinix Fabric l2 connection with 200 Mbps bandwidth
-- Configure BGP session between the GCP cloud router and your Network Edge device
+- Use 'default' VPC.
+- Use the `project` specified in provider.
+- Create a Google Cloud Router.
+- Create a Google Cloud Interconnect/VLAN Attachment.
+- Create Equinix Fabric l2 connection with 200 Mbps bandwidth.
+- Configure BGP session between the GCP cloud router and your Network Edge device.
 
 ## Usage
 

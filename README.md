@@ -79,7 +79,7 @@ See <https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/eq
 | Name | Type |
 |------|------|
 | [random_string.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
-| [equinix-fabric-connection](https://registry.terraform.io/modules/equinix-labs/fabric-connection/equinix/latest?tab=inputs) | module |
+| [equinix-fabric-connection](https://registry.terraform.io/modules/equinix-labs/fabric-connection/equinix/latest) | module |
 | [equinix_network_bgp.this](https://registry.terraform.io/providers/equinix/equinix/latest/docs/resources/equinix_network_bgp) | resource |
 | [google_compute_interconnect_attachment.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_interconnect_attachment) | resource |
 | [google_compute_router.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router) | resource |
@@ -90,5 +90,5 @@ See <https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/eq
 
 ### Examples
 
-- [Fabric Port connection example](https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/equinix/latest/examples/fabric-port-connection/)
+- [Fabric Port connection](https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/equinix/latest/examples/fabric-port-connection/)
 - [Network Edge device connection](https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/equinix/latest/examples/network-edge-device-connection/)

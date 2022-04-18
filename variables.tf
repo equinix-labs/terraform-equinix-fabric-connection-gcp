@@ -188,8 +188,8 @@ variable "platform" {
 variable "gcp_configure_bgp" {
   type        = bool
   description = <<EOF
-  To complete configuration of bgp peering in Google platform. If 'network_edge_configure_bgp' is true
-  BGP will be configured as well in gcp even if 'gcp_configure_bgp' is false.
+  To complete configuration of bgp peering in Google platform. If 'network_edge_configure_bgp' is set to 'true',
+  then BGP will be configured as well in gcp even if 'gcp_configure_bgp' is set to 'false'.
 
   NOTE: Configuration of the bgp customer ASN in google side is not directly supported with current google terraform
   provider (v3.72.0). As a workaround this module take advantage of 'terraform-google-gcloud' module which allows use

@@ -51,7 +51,7 @@ resource "google_compute_interconnect_attachment" "this" {
 
 module "equinix-fabric-connection" {
   source = "equinix-labs/fabric-connection/equinix"
-  version = "0.1.0"
+  version = "0.1.1"
 
   # required variables
   notification_users = var.fabric_notification_users
