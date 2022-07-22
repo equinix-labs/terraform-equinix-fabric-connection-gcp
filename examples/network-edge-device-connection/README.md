@@ -2,8 +2,8 @@
 
 This example demonstrates usage of the Equinix Connection GCP module to establish a non-redundant Equinix Fabric L2 Connection from a Equinix Network Edge device to Google Cloud Interconnect. It will:
 
+- Use an existing GCP project.
 - Use 'default' VPC.
-- Use the `project` specified in provider.
 - Create a Google Cloud Router.
 - Create a Google Cloud Interconnect/VLAN Attachment.
 - Create Equinix Fabric l2 connection with 200 Mbps bandwidth.
