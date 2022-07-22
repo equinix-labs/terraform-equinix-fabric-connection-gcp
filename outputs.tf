@@ -62,6 +62,11 @@ output "gcp_cloud_router_id" {
   value       = local.gcp_compute_router_id
 }
 
+output "gcp_cloud_router_name" {
+  description = "Google Cloud Router Name."
+  value       = var.gcp_compute_create_router ? google_compute_router.this[0].name : data.google_compute_router.this[0].name
+}
+
 output "gcp_cloud_router_ip_address" {
   description = <<EOF
   Google Cloud Router IPv4 address + prefix length to be configured on CLOUD Router Interface for the interconnect

@@ -64,7 +64,7 @@ module "equinix-fabric-connection-gcp" {
 Run `terraform init -upgrade` and `terraform apply`.
 
 -> **NOTE:**
-Completing BGP configuration in GCP side is not directly supported with current google terraform provider (v3.72.0). As a workaround this module take advantage of [terraform-google-gcloud](https://registry.terraform.io/modules/terraform-google-modules/gcloud/google/latest) module which allows use gcloud. However, it is only available for `linux` and `darwin` based operating systems. To run this module in a non-supported platfom, 'network_edge_configure_bgp' and 'gcp_configure_bgp' must remain false. Check this [issue](https://github.com/hashicorp/terraform-provider-google/issues/9582) to obtain further information.
+Setting up BGP configuration in GCP side is not directly supported with current google terraform provider (v3.72.0). As a workaround this module take advantage of [terraform-google-gcloud](https://registry.terraform.io/modules/terraform-google-modules/gcloud/google/latest) module which allows use gcloud. However, it is only available for `linux` and `darwin` based operating systems. To run this module in a non-supported platfom, 'network_edge_configure_bgp' and 'gcp_configure_bgp' must remain false. Check this [issue](https://github.com/hashicorp/terraform-provider-google/issues/9582) to obtain further information.
 
 ### Variables
 
@@ -92,3 +92,4 @@ See <https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/eq
 
 - [Fabric Port connection](https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/equinix/latest/examples/fabric-port-connection/)
 - [Network Edge device connection](https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/equinix/latest/examples/network-edge-device-connection/)
+- [Service Token (a-side) Equinix Metal to GCP redundant connection End-to-End Solution](https://registry.terraform.io/modules/equinix-labs/fabric-connection-gcp/equinix/latest/examples/service-token-metal-to-gcp-connection/)
