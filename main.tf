@@ -1,11 +1,11 @@
 locals {
-  gcp_compute_router_name        = coalesce(var.gcp_compute_router_name, lower(format("router-%s", random_string.this.result)))
-  gcp_compute_router_id          = var.gcp_compute_create_router ? google_compute_router.this[0].id : data.google_compute_router.this[0].id
-  gcp_region                     = coalesce(var.gcp_region, data.google_client_config.this.region)
-  gcp_project                    = coalesce(var.gcp_project, data.google_client_config.this.project)
-  gcp_network                    = data.google_compute_network.this.id
-  gcp_bgp_addresses              = try(jsondecode(data.local_file.this[0].content), null)
-  gcp_bgp_addresses_file_path    = "${path.module}/gcp_peering_addresses.json"
+  gcp_compute_router_name     = coalesce(var.gcp_compute_router_name, lower(format("router-%s", random_string.this.result)))
+  gcp_compute_router_id       = var.gcp_compute_create_router ? google_compute_router.this[0].id : data.google_compute_router.this[0].id
+  gcp_region                  = coalesce(var.gcp_region, data.google_client_config.this.region)
+  gcp_project                 = coalesce(var.gcp_project, data.google_client_config.this.project)
+  gcp_network                 = data.google_compute_network.this.id
+  gcp_bgp_addresses           = try(jsondecode(data.local_file.this[0].content), null)
+  gcp_bgp_addresses_file_path = "${path.module}/gcp_peering_addresses.json"
 }
 
 data "google_client_config" "this" {}
@@ -41,16 +41,16 @@ resource "random_string" "this" {
 }
 
 resource "google_compute_interconnect_attachment" "this" {
-  name    = coalesce(var.gcp_compute_interconnect_name, lower(format("interconnect-%s", random_string.this.result)))
-  type    = "PARTNER"
-  router  = local.gcp_compute_router_id
-  region  = local.gcp_region
+  name   = coalesce(var.gcp_compute_interconnect_name, lower(format("interconnect-%s", random_string.this.result)))
+  type   = "PARTNER"
+  router = local.gcp_compute_router_id
+  region = local.gcp_region
 
   edge_availability_domain = format("AVAILABILITY_DOMAIN_%d", var.gcp_availability_domain)
 }
 
 module "equinix-fabric-connection" {
-  source = "equinix-labs/fabric-connection/equinix"
+  source  = "equinix-labs/fabric-connection/equinix"
   version = "0.3.1"
 
   # required variables
@@ -59,11 +59,11 @@ module "equinix-fabric-connection" {
   # optional variables
   name = var.fabric_connection_name
 
-  seller_profile_name       = format("Google Cloud Partner Interconnect Zone %d", var.gcp_availability_domain)
-  seller_metro_code         = var.fabric_destination_metro_code
-  seller_metro_name         = var.fabric_destination_metro_name
-  seller_region             = local.gcp_region
-  seller_authorization_key  = google_compute_interconnect_attachment.this.pairing_key
+  seller_profile_name      = format("Google Cloud Partner Interconnect Zone %d", var.gcp_availability_domain)
+  seller_metro_code        = var.fabric_destination_metro_code
+  seller_metro_name        = var.fabric_destination_metro_name
+  seller_region            = local.gcp_region
+  seller_authorization_key = google_compute_interconnect_attachment.this.pairing_key
 
   network_edge_id           = var.network_edge_device_id
   network_edge_interface_id = var.network_edge_device_interface_id
@@ -72,7 +72,7 @@ module "equinix-fabric-connection" {
   service_token_id          = var.fabric_service_token_id
   speed                     = var.fabric_speed
   speed_unit                = "MB"
-  purchase_order_number    = var.fabric_purchase_order_number
+  purchase_order_number     = var.fabric_purchase_order_number
 }
 
 module "gcloud-configure-bgp" {
@@ -85,12 +85,12 @@ module "gcloud-configure-bgp" {
   upgrade       = false
 
   create_cmd_body = join(" ", ["compute routers update-bgp-peer ${local.gcp_compute_router_id}",
-   "--peer-name=$(gcloud compute routers describe ${local.gcp_compute_router_id} --region=${local.gcp_region} --project=${local.gcp_project} --format=\"value(bgpPeers.name)\")",
-   "--peer-asn=${var.gcp_interconnect_customer_asn}",
-   "--advertisement-mode=CUSTOM",
-   "--set-advertisement-groups=ALL_SUBNETS",
-   "--region=${local.gcp_region}",
-   "--project=${local.gcp_project}"])
+    "--peer-name=$(gcloud compute routers describe ${local.gcp_compute_router_id} --region=${local.gcp_region} --project=${local.gcp_project} --format=\"value(bgpPeers.name)\")",
+    "--peer-asn=${var.gcp_interconnect_customer_asn}",
+    "--advertisement-mode=CUSTOM",
+    "--set-advertisement-groups=ALL_SUBNETS",
+    "--region=${local.gcp_region}",
+  "--project=${local.gcp_project}"])
 
   module_depends_on = [
     module.equinix-fabric-connection,
@@ -106,17 +106,17 @@ module "gcloud-get-bgp-addresses" {
   skip_download = true
   upgrade       = false
 
-  create_cmd_entrypoint  = "${path.module}/scripts/gcp_get_bgp_addresses.sh"
-  create_cmd_body  = join(" ", [
+  create_cmd_entrypoint = "${path.module}/scripts/gcp_get_bgp_addresses.sh"
+  create_cmd_body = join(" ", [
     google_compute_interconnect_attachment.this.name,
     local.gcp_region,
     local.gcp_project,
     local.gcp_bgp_addresses_file_path,
     var.gcp_gcloud_skip_download ? "gcloud" : abspath("${module.gcloud-configure-bgp.bin_dir}/gcloud"),
-    var.gcp_gcloud_skip_download ? "jq" : abspath("${module.gcloud-configure-bgp.bin_dir}/jq")])
+  var.gcp_gcloud_skip_download ? "jq" : abspath("${module.gcloud-configure-bgp.bin_dir}/jq")])
 
   destroy_cmd_entrypoint = "echo"
-  destroy_cmd_body = "'# This file is auto-generated by equinix-labs/fabric-connection-gcp/equinix terraform module.' > ${local.gcp_bgp_addresses_file_path}"
+  destroy_cmd_body       = "'# This file is auto-generated by equinix-labs/fabric-connection-gcp/equinix terraform module.' > ${local.gcp_bgp_addresses_file_path}"
 
   module_depends_on = [
     module.gcloud-configure-bgp.wait,
@@ -130,19 +130,19 @@ data "local_file" "this" {
 
   depends_on = [
     module.gcloud-get-bgp-addresses.wait,
-  ]  
+  ]
 }
 
 resource "equinix_network_bgp" "this" {
   count = alltrue([var.network_edge_device_id != "", var.network_edge_configure_bgp]) ? 1 : 0
 
-  connection_id      = module.equinix-fabric-connection.primary_connection.uuid
-  local_ip_address   = local.gcp_bgp_addresses.customer_router_ip
-  local_asn          = tonumber(var.gcp_interconnect_customer_asn)
-  remote_ip_address  = split("/", local.gcp_bgp_addresses.cloud_router_ip)[0]
-  remote_asn         = 16550
+  connection_id     = module.equinix-fabric-connection.primary_connection.uuid
+  local_ip_address  = local.gcp_bgp_addresses.customer_router_ip
+  local_asn         = tonumber(var.gcp_interconnect_customer_asn)
+  remote_ip_address = split("/", local.gcp_bgp_addresses.cloud_router_ip)[0]
+  remote_asn        = 16550
 
   depends_on = [
     module.gcloud-get-bgp-addresses.wait,
-  ] 
+  ]
 }
