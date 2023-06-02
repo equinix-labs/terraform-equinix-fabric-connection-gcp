@@ -23,7 +23,7 @@ variable "fabric_destination_metro_code" {
   default     = ""
 
   validation {
-    condition = ( 
+    condition = (
       var.fabric_destination_metro_code == "" ? true : can(regex("^[A-Z]{2}$", var.fabric_destination_metro_code))
     )
     error_message = "Valid metro code consits of two capital leters, i.e. 'FR', 'SV', 'DC'."
@@ -100,7 +100,7 @@ variable "fabric_speed" {
   default     = 0
 
   validation {
-    condition = contains([0, 50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000], var.fabric_speed)
+    condition     = contains([0, 50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000], var.fabric_speed)
     error_message = "Valid values are (50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000)."
   }
 }
@@ -112,15 +112,15 @@ variable "fabric_purchase_order_number" {
 }
 
 variable "gcp_availability_domain" {
-  type = number
+  type        = number
   description = <<EOF
   Valid values for are (1, 2). Desired availability domain for the attachment. For improved reliability, customers
   should configure a pair of attachments with one per availability domain. Default is 1.
   EOF
-  default = 1
+  default     = 1
 
   validation {
-    condition = contains([1, 2], var.gcp_availability_domain)
+    condition     = contains([1, 2], var.gcp_availability_domain)
     error_message = "Valid values are (1, 2)."
   }
 }
@@ -177,10 +177,10 @@ variable "platform" {
   Read 'gcp_configure_bgp' description for further details.
   EOF
 
-  default     = "linux"
+  default = "linux"
 
   validation {
-    condition = contains(["linux", "darwin"], var.platform)
+    condition     = contains(["linux", "darwin"], var.platform)
     error_message = "Valid values are (linux, darwin)."
   }
 }
