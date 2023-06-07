@@ -18,7 +18,7 @@ variable "equinix_provider_client_secret" {
 
 variable "gcp_project" {
   type        = string
-  description = "(Required) Name of the GCP project to manage resources in."
+  description = "(Required) ID of the GCP project to manage resources in."
 }
 
 variable "gcp_region" {
