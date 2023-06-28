@@ -136,7 +136,7 @@ variable "gcp_region" {
 
 variable "gcp_project" {
   type        = string
-  description = "The project in which the GCP resources resides. If it is not provided, the provider project is used."
+  description = "ID of the project in which the GCP resources resides. If it is not provided, the provider project is used."
   default     = ""
 }
 
