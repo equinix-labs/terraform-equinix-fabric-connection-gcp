@@ -13,15 +13,11 @@ output "fabric_connection_status" {
   value       = module.equinix-fabric-connection.primary_connection.state
 }
 
-output "fabric_connection_equinix_status" {
-  description = "Connection equinix status."
-  value       = module.equinix-fabric-connection.primary_connection.operation.equinix_status
+output "fabric_connection_equinix_operation" {
+  description = "Connection operation status object."
+  value       = module.equinix-fabric-connection.primary_connection.operation
 }
 
-output "fabric_connection_provider_status" {
-  description = "Connection provisioning provider status."
-  value       = module.equinix-fabric-connection.primary_connection.operation.provider_status
-}
 
 output "fabric_connection_bandwidth" {
   description = "Connection bandwidth in Mbps"
@@ -30,12 +26,12 @@ output "fabric_connection_bandwidth" {
 
 output "fabric_connection_seller_metro" {
   description = "Connection seller metro code."
-  value       = module.equinix-fabric-connection.primary_connection.z_side.access_point.location.metro_code
+  value       = [for i in module.equinix-fabric-connection.primary_connection.z_side : [for j in i.access_point : [for k in j.location : k.metro_code]]]
 }
 
 output "fabric_connection_seller_region" {
   description = "Connection seller region."
-  value       = module.equinix-fabric-connection.primary_connection.z_side.access_point.seller_region
+  value       = [for i in module.equinix-fabric-connection.primary_connection.z_side : [for j in i.access_point : j.seller_region]]
 }
 
 output "network_edge_bgp_state" {
