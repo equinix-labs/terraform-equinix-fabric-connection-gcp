@@ -51,7 +51,7 @@ resource "google_compute_interconnect_attachment" "this" {
 
 module "equinix-fabric-connection" {
   source  = "equinix-labs/fabric-connection/equinix"
-  version = "0.4.0"
+  version = "0.5.0"
 
   # required variables
   notification_users = var.fabric_notification_users
@@ -71,7 +71,6 @@ module "equinix-fabric-connection" {
   vlan_stag                 = var.fabric_vlan_stag
   service_token_id          = var.fabric_service_token_id
   speed                     = var.fabric_speed
-  speed_unit                = "MB"
   purchase_order_number     = var.fabric_purchase_order_number
 }
 
