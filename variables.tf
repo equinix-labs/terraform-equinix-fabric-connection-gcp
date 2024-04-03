@@ -140,10 +140,10 @@ variable "gcp_project" {
   default     = ""
 }
 
-variable "gcp_compute_network_name" {
+variable "gcp_compute_network_id" {
   type        = string
-  description = "The name of an existing Google Cloud VPC network. If unspecified, default regional network will be used."
-  default     = "default"
+  description = "The ID of an existing Google Cloud VPC network. If unspecified, default regional network will be used."
+  default     = ""
 }
 
 variable "gcp_compute_create_router" {
@@ -152,9 +152,9 @@ variable "gcp_compute_create_router" {
   default     = true
 }
 
-variable "gcp_compute_router_name" {
+variable "gcp_compute_router_id" {
   type        = string
-  description = "The name for Google Cloud router. If unspecified, it will be auto-generated. Required if 'gcp_compute_create_router' is false."
+  description = "The ID for Google Cloud router. If unspecified, it will be auto-generated. Required if 'gcp_compute_create_router' is false."
   default     = ""
 }
 
