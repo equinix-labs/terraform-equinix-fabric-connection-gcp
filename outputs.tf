@@ -9,29 +9,28 @@ output "fabric_connection_name" {
 }
 
 output "fabric_connection_status" {
-  description = "Connection overall state."
-  value       = module.equinix-fabric-connection.primary_connection.state
+  description = "Connection provisioning status."
+  value       = tolist(module.equinix-fabric-connection.primary_connection.operation)[0].equinix_status
 }
 
-output "fabric_connection_equinix_operation" {
-  description = "Connection operation status object."
-  value       = module.equinix-fabric-connection.primary_connection.operation
+output "fabric_connection_provider_status" {
+  description = "Connection provisioning provider status."
+  value       = tolist(module.equinix-fabric-connection.primary_connection.operation)[0].provider_status
 }
 
-
-output "fabric_connection_bandwidth" {
-  description = "Connection bandwidth in Mbps"
+output "fabric_connection_speed" {
+  description = "Connection speed in Mbps"
   value       = module.equinix-fabric-connection.primary_connection.bandwidth
 }
 
 output "fabric_connection_seller_metro" {
   description = "Connection seller metro code."
-  value       = [for i in module.equinix-fabric-connection.primary_connection.z_side : [for j in i.access_point : [for k in j.location : k.metro_code]]]
+  value       = flatten([for i in module.equinix-fabric-connection.primary_connection.z_side : [for j in i.access_point : [for k in j.location : k.metro_code]]])[0]
 }
 
 output "fabric_connection_seller_region" {
   description = "Connection seller region."
-  value       = [for i in module.equinix-fabric-connection.primary_connection.z_side : [for j in i.access_point : j.seller_region]]
+  value       = flatten([for i in module.equinix-fabric-connection.primary_connection.z_side : [for j in i.access_point : j.seller_region]])[0]
 }
 
 output "network_edge_bgp_state" {
