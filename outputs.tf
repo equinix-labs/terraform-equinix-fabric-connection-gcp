@@ -59,7 +59,7 @@ output "gcp_cloud_router_id" {
 
 output "gcp_cloud_router_name" {
   description = "Google Cloud Router Name."
-  value       = var.gcp_compute_create_router ? google_compute_router.this[0].name : data.google_compute_router.this[0].name
+  value       = var.gcp_compute_create_router ? google_compute_router.this[0].name : ""
 }
 
 output "gcp_cloud_router_ip_address" {

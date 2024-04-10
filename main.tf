@@ -1,25 +1,14 @@
 locals {
-  gcp_compute_router_name     = coalesce(var.gcp_compute_router_name, lower(format("router-%s", random_string.this.result)))
-  gcp_compute_router_id       = var.gcp_compute_create_router ? google_compute_router.this[0].id : data.google_compute_router.this[0].id
+  gcp_compute_router_name     = lower(format("router-%s", random_string.this.result))
+  gcp_compute_router_id       = var.gcp_compute_create_router ? google_compute_router.this[0].id : var.gcp_compute_router_id
   gcp_region                  = coalesce(var.gcp_region, data.google_client_config.this.region)
   gcp_project                 = coalesce(var.gcp_project, data.google_client_config.this.project)
-  gcp_network                 = data.google_compute_network.this.id
+  gcp_network                 = var.gcp_compute_network_id
   gcp_bgp_addresses           = try(jsondecode(data.local_file.this[0].content), null)
   gcp_bgp_addresses_file_path = "${path.module}/gcp_peering_addresses.json"
 }
 
 data "google_client_config" "this" {}
-
-data "google_compute_network" "this" {
-  name = var.gcp_compute_network_name
-}
-
-data "google_compute_router" "this" {
-  count = var.gcp_compute_create_router ? 0 : 1
-
-  name    = local.gcp_compute_router_name
-  network = local.gcp_network
-}
 
 resource "google_compute_router" "this" {
   count = var.gcp_compute_create_router ? 1 : 0
