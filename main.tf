@@ -76,7 +76,7 @@ module "equinix-fabric-connection" {
 
 module "gcloud-configure-bgp" {
   source  = "terraform-google-modules/gcloud/google"
-  version = "3.4.0"
+  version = "3.4.1"
   enabled = anytrue([var.gcp_configure_bgp, var.network_edge_configure_bgp])
 
   skip_download = var.gcp_gcloud_skip_download
@@ -98,7 +98,7 @@ module "gcloud-configure-bgp" {
 
 module "gcloud-get-bgp-addresses" {
   source  = "terraform-google-modules/gcloud/google"
-  version = "3.4.0"
+  version = "3.4.1"
   enabled = anytrue([var.gcp_configure_bgp, var.network_edge_configure_bgp])
 
   platform      = var.platform
